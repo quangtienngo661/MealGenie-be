@@ -80,7 +80,7 @@ http://localhost:5000/api-docs
 
 The API documentation is generated using Swagger/OpenAPI and provides detailed information about all available endpoints, request/response schemas, and authentication requirements. -->
 
----
+
 
 ## 🔐 Authentication
 
