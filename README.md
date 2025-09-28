@@ -1,7 +1,7 @@
 # MealGenie Backend API
 
 This is the backend service for the **MealGenie** AI Meal Recommendation project.  
-It is built with **Express.js** and **MongoDB**, providing RESTful APIs for meal recommendations, user management, and recipe data.
+It is built with **Express.js** and **MongoDB**, providing RESTful APIs for meal recommendations, user management, and recipe data with AI technology.
 
 ---
 
