@@ -41,6 +41,12 @@ app.use((req, res, next) => {
 
 // Routes
 
+
+// Home route
+app.use('/', (req, res) => {
+    return res.end('Welcome to MealGenie API');
+})
+
 // Middleware for catching unexisted routes
 // For more specifically, if there is an unmatched route ascendingly, this middleware will run 
 app.use(routeNotFound)
