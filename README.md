@@ -21,30 +21,34 @@ It is built with **Express.js** and **MongoDB**, providing RESTful APIs for meal
 
 ## 📦 Prerequisites
 
-- [Node.js](https://nodejs.org/) (>= 18.x recommended)  
-- [MongoDB](https://www.mongodb.com/) (local installation or MongoDB Atlas)  
-- npm or yarn package manager  
+- [Node.js](https://nodejs.org/) (>= 18.x recommended)
+- [MongoDB](https://www.mongodb.com/) (local installation or MongoDB Atlas)
+- npm or yarn package manager
 
 ---
 
 ## 🚀 Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/quangtienngo661/MealGenie-be.git
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables**
+
    ```bash
    cp .env.example .env
    ```
-   
+
    Edit the `.env` file with your configuration:
+
    ```env
    MONGO_URL=mongodb:your-db-url
    BE_PORT= your_port || 5000
@@ -62,12 +66,12 @@ The server will start on `http://localhost:5000` (or your configured port).
 
 ## 🔧 Available Scripts
 
-| Script | Description |
-|--------|-------------|
-| `npm run dev` | Start development server with nodemon |
-<!-- | `npm test` | Run test suite with Jest |
-| `npm run lint` | Run ESLint for code linting |
-| `npm run format` | Format code with Prettier | -->
+| Script           | Description                           |
+| ---------------- | ------------------------------------- | ------------------------ |
+| `npm run dev`    | Start development server with nodemon |
+| <!--             | `npm test`                            | Run test suite with Jest |
+| `npm run lint`   | Run ESLint for code linting           |
+| `npm run format` | Format code with Prettier             | -->                      |
 
 ---
 
@@ -75,12 +79,10 @@ The server will start on `http://localhost:5000` (or your configured port).
 
 Once the server is running, you can access the interactive API documentation at:
 ```
-http://localhost:5000/api-docs 
+http://localhost:5000/api-docs
 ```
 
 The API documentation is generated using Swagger/OpenAPI and provides detailed information about all available endpoints, request/response schemas, and authentication requirements. -->
-
-
 
 ## 🔐 Authentication
 
@@ -102,9 +104,9 @@ Authorization: Bearer <your-jwt-token>
 - **Helmet.js**: Security headers
 - **CORS**: Cross-origin resource sharing configuration
 - **Rate Limiting**: Request rate limiting to prevent abuse
-<!-- - **Input Validation**: Request validation using Joi and express-validator -->
-<!-- - **Password Hashing**: Secure password hashing with bcrypt -->
-<!-- - **JWT Authentication**: Secure token-based authentication -->
+  <!-- - **Input Validation**: Request validation using Joi and express-validator -->
+  <!-- - **Password Hashing**: Secure password hashing with bcrypt -->
+  <!-- - **JWT Authentication**: Secure token-based authentication -->
 
 ---
 
@@ -140,6 +142,7 @@ npm test
 - **Lint-staged**: Run linters on staged files -->
 
 ### Environment Setup
+
 1. Install dependencies: `npm install`
 2. Set up your `.env` file
 3. Start MongoDB service
@@ -149,11 +152,11 @@ npm test
 
 ## 📝 Environment Variables
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `MONGO_URL` | MongoDB connection string | `mongo_url` |
-| `BE_PORT` | Server port number | `your_port` |
-| `JWT_SECRET` | JWT signing secret | `your-super-secret-key` |
+| Variable     | Description               | Example                 |
+| ------------ | ------------------------- | ----------------------- |
+| `MONGO_URL`  | MongoDB connection string | `mongo_url`             |
+| `BE_PORT`    | Server port number        | `your_port`             |
+| `JWT_SECRET` | JWT signing secret        | `your-super-secret-key` |
 
 ---
 
@@ -186,6 +189,7 @@ CMD ["node", "src/server.js"]
 5. Open a Pull Request
 
 ### Development Guidelines
+
 - Follow the existing code style
 - Write tests for new features
 - Update documentation as needed
@@ -216,6 +220,7 @@ This project is licensed under the ISC License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 If you have any questions or need help with setup, please:
+
 1. Check the [API Documentation](http://localhost:5000/api-docs)
 2. Search existing [Issues](https://github.com/quangtienngo661/MealGenie-be/issues)
 3. Create a new issue if needed

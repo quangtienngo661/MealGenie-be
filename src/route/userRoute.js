@@ -6,15 +6,13 @@ const {
   loginUser,
   changePassword,
   deactivateAccount,
-  validateRegistration,
-  validateLogin,
-  validatePasswordChange,
-  handleValidationErrors
 } = require('../controller/userController');
 
 const { getUserById } = require('../controller/profileController');
 
 const { authenticate } = require('../middleware/authMiddleware');
+const { handleValidationErrors } = require('../middleware/validator');
+const { validateRegistration, validateLogin, validatePasswordChange } = require('../validation/userValidation');
 
 /**
  * @swagger

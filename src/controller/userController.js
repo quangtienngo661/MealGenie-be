@@ -1,81 +1,10 @@
-const { body, validationResult } = require('express-validator');
 const { catchAsync } = require('../util/catchAsync');
-const AppError = require('../util/AppError');
 const userService = require('../service/userService');
 const { createSendToken } = require('../middleware/authMiddleware');
 
 // Validation middleware for registration
-const validateRegistration = [
-  body('email')
-    .isEmail()
-    .normalizeEmail()
-    .withMessage('Please provide a valid email'),
-  body('password')
-    .isLength({ min: 6 })
-    .withMessage('Password must be at least 6 characters long')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
-    .withMessage('Password must contain at least one lowercase letter, one uppercase letter, and one number'),
-  body('name')
-    .trim()
-    .isLength({ min: 2, max: 50 })
-    .withMessage('Name must be between 2 and 50 characters'),
-  body('age')
-    .isInt({ min: 13, max: 120 })
-    .withMessage('Age must be between 13 and 120'),
-  body('gender')
-    .isIn(['male', 'female', 'other'])
-    .withMessage('Gender must be male, female, or other'),
-  body('height')
-    .isFloat({ min: 50, max: 300 })
-    .withMessage('Height must be between 50 and 300 cm'),
-  body('weight')
-    .isFloat({ min: 20, max: 500 })
-    .withMessage('Weight must be between 20 and 500 kg'),
-  body('goal')
-    .isIn(['lose_weight', 'maintain_weight', 'gain_weight', 'build_muscle', 'improve_health'])
-    .withMessage('Goal must be one of: lose_weight, maintain_weight, gain_weight, build_muscle, improve_health'),
-  body('preferences')
-    .optional()
-    .isArray()
-    .withMessage('Preferences must be an array of strings'),
-  body('allergies')
-    .optional()
-    .isArray()
-    .withMessage('Allergies must be an array of strings')
-];
-
-// Validation middleware for login
-const validateLogin = [
-  body('email')
-    .isEmail()
-    .normalizeEmail()
-    .withMessage('Please provide a valid email'),
-  body('password')
-    .notEmpty()
-    .withMessage('Password is required')
-];
-
-// Validation middleware for password change
-const validatePasswordChange = [
-  body('currentPassword')
-    .notEmpty()
-    .withMessage('Current password is required'),
-  body('newPassword')
-    .isLength({ min: 6 })
-    .withMessage('New password must be at least 6 characters long')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
-    .withMessage('New password must contain at least one lowercase letter, one uppercase letter, and one number')
-];
 
 // Helper function to handle validation errors
-const handleValidationErrors = (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    const errorMessages = errors.array().map(error => error.msg);
-    return next(new AppError(`Validation Error: ${errorMessages.join(', ')}`, 400));
-  }
-  next();
-};
 
 /**
  * @swagger
@@ -126,9 +55,9 @@ const handleValidationErrors = (req, res, next) => {
  */
 const registerUser = catchAsync(async (req, res, next) => {
   const userData = req.body;
-  
+
   const user = await userService.registerUser(userData);
-  
+
   createSendToken(user, 201, res, 'User registered successfully');
 });
 
@@ -179,9 +108,9 @@ const registerUser = catchAsync(async (req, res, next) => {
  */
 const loginUser = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
-  
+
   const user = await userService.loginUser(email, password);
-  
+
   createSendToken(user, 200, res, 'Login successful');
 });
 
@@ -234,12 +163,18 @@ const loginUser = catchAsync(async (req, res, next) => {
  */
 const changePassword = catchAsync(async (req, res, next) => {
   const { currentPassword, newPassword } = req.body;
-  
-  const result = await userService.changePassword(req.user._id, currentPassword, newPassword);
-  
+
+  const result = await userService.changePassword(
+    req.user._id,
+    currentPassword,
+    newPassword
+  );
+
+  return res.ok(result.message, 200);
+
   res.status(200).json({
     success: true,
-    message: result.message
+    message: result.message,
   });
 });
 
@@ -280,11 +215,13 @@ const changePassword = catchAsync(async (req, res, next) => {
  */
 const deactivateAccount = catchAsync(async (req, res, next) => {
   const result = await userService.deactivateUser(req.user._id);
-  
-  res.status(200).json({
-    success: true,
-    message: result.message
-  });
+
+  return res.ok(result.message, 200);
+
+  // res.status(200).json({
+  //   success: true,
+  //   message: result.message
+  // });
 });
 
 module.exports = {
@@ -292,8 +229,4 @@ module.exports = {
   loginUser,
   changePassword,
   deactivateAccount,
-  validateRegistration,
-  validateLogin,
-  validatePasswordChange,
-  handleValidationErrors
 };
