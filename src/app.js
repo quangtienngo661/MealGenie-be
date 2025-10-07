@@ -16,13 +16,21 @@ const { connectDb } = require('./config/dbConfig');
 const { corsConfig } = require('./config/corsConfig');
 const { globalLimiter } = require('./config/rateLimitConfig');
 
+// Swagger setup
+const { swaggerSpec, swaggerUi, swaggerUiOptions } = require('./swagger');
+
+// Import models to register them
+require('./model/foodModel');
+
 // Imported routes
+const userRoute = require('./route/userRoute');
+const profileRoute = require('./route/profileRoute');
 
 // ========= MIDDLEWARE SECTION =========
 const app = express();
 connectDb();
 
-// Swagger Doc
+// Swagger configuration is now imported from swagger.js
 
 // Using middlewares
 app.use(express.json());
@@ -37,10 +45,12 @@ app.use((req, res, next) => {
     next();
 })
 
-// Swagger setup
+// Swagger UI setup
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerUiOptions));
 
 // Routes
-
+app.use('/api/v1/users', userRoute); // Authentication routes
+app.use('/api/v1/profile', profileRoute); // Profile management routes
 
 // Home route
 app.use('/', (req, res) => {

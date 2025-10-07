@@ -1,11 +1,8 @@
-const AppError = require("../util/AppError");
-
-const whiteList = ['http://localhost:3000']
-
+// Simple CORS configuration for development
 exports.corsConfig = {
-    origin: ((origin, callback) => {
-        if (!origin || whiteList.includes(origin)) return callback(null, true);
-        callback(new AppError("Not allowed by CORS", 403));
-    }), 
-    credentials: true
+    origin: true, // Allow all origins during development
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+    optionsSuccessStatus: 200
 }
