@@ -1,14 +1,14 @@
-const { failure } = require("../util/response");
+const { failure } = require('../util/response');
 
-require("dotenv").config();
+require('dotenv').config();
 
 exports.globalErrorHandler = (err, req, res, next) => {
-    // const message = err.message; 
-    const statusCode = err.statusCode;
+  // const message = err.message;
+  const { statusCode } = err;
 
-    if (process.env.NODE_ENV !== 'production') {
-        console.error("Error caught by error handler: ", err);
-    }
+  if (process.env.NODE_ENV !== 'production') {
+    console.error('Error caught by error handler: ', err);
+  }
 
-    return failure(res, err, statusCode);
-}
+  return failure(res, err, statusCode);
+};
