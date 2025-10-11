@@ -2,10 +2,10 @@ exports.success = (res, data, message, status = 200, meta) => {
   const payload = {
     success: true,
     message,
-    // data
+    data: data || null
   };
 
-  if (data) payload.data = data;
+  // if (data) payload.data = data;
   if (meta) payload.meta = meta;
 
   return res.status(status).json(payload);
