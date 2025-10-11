@@ -109,7 +109,6 @@ class UserService {
         throw new AppError('User not found', 404);
       }
 
-      console.log(updatedUser);
 
       return updatedUser;
     } catch (error) {
