@@ -1,5 +1,5 @@
 {
-  "name": "mealgenie-backend",
+  "name": "noumeal-backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,7 +11,9 @@
     "test:coverage": "jest --coverage",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .", 
+    "docker:build:dev": "docker compose -f docker-compose.dev.yml build",
+    "docker:up:dev": "docker compose -f docker-compose.dev.yml up"
   },
   "keywords": [],
   "author": "",
