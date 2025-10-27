@@ -1,5 +1,5 @@
 # stage 1: install production dependencies (uses package-lock for reproducible install)
-FROM node:18-alpine AS deps
+FROM node:20-alpine AS deps
 WORKDIR /app
 
 # system deps for some native modules (only if needed) — comment/remove nếu không cần
@@ -10,7 +10,7 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 
 # stage 2: copy app source
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 WORKDIR /app
 
 # copy node_modules from deps stage
@@ -23,7 +23,7 @@ COPY . .
 # RUN npm run build
 
 # stage 3: runtime, minimal image
-FROM node:18-alpine AS runtime
+FROM node:20-alpine AS runtime
 WORKDIR /app
 
 ENV NODE_ENV=production

@@ -1,6 +1,6 @@
-# MealGenie Backend API
+# NouMeal Backend API
 
-This is the backend service for the **MealGenie** AI Meal Recommendation project.  
+This is the backend service for the **NouMeal** AI Meal Recommendation project.  
 It is built with **Express.js** and **MongoDB**, providing RESTful APIs for meal recommendations, user management, and recipe data with AI technology.
 
 ---
@@ -32,16 +32,16 @@ It is built with **Express.js** and **MongoDB**, providing RESTful APIs for meal
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/quangtienngo661/MealGenie-be.git
+   git clone https://github.com/quangtienngo661/NouMeal-be.git
    ```
 
-2. **Install dependencies**
+<!-- 2. **Install dependencies**
 
    ```bash
    npm install
-   ```
+   ``` -->
 
-3. **Set up environment variables**
+2. **Set up environment variables**
 
    ```bash
    cp .env.example .env
@@ -51,38 +51,39 @@ It is built with **Express.js** and **MongoDB**, providing RESTful APIs for meal
 
    ```env
    MONGO_URL=mongodb:your-db-url
-   BE_PORT= your_port || 5000
+   BE_PORT= your_port || 3000
    JWT_SECRET=your-super-secret-jwt-key
    ```
 
-4. **Start the development server**
+3. **Start the development server**
    ```bash
-   npm run dev
+   npm run docker:build:dev
+   npm run docker:up:dev
    ```
 
-The server will start on `http://localhost:5000` (or your configured port).
+The server will start on `http://localhost:3000` (or your configured port).
 
 ---
 
-## 🔧 Available Scripts
+<!-- ## 🔧 Available Scripts
 
 | Script           | Description                           |
 | ---------------- | ------------------------------------- | ------------------------ |
 | `npm run dev`    | Start development server with nodemon |
 | <!--             | `npm test`                            | Run test suite with Jest |
 | `npm run lint`   | Run ESLint for code linting           |
-| `npm run format` | Format code with Prettier             | -->                      |
+| `npm run format` | Format code with Prettier             | -->                      | -->
 
 ---
 
-<!-- ## 📚 API Documentation
+## 📚 API Documentation
 
 Once the server is running, you can access the interactive API documentation at:
 ```
-http://localhost:5000/api-docs
+http://localhost:3000/api-docs
 ```
 
-The API documentation is generated using Swagger/OpenAPI and provides detailed information about all available endpoints, request/response schemas, and authentication requirements. -->
+The API documentation is generated using Swagger/OpenAPI and provides detailed information about all available endpoints, request/response schemas, and authentication requirements.
 
 ## 🔐 Authentication
 
@@ -104,9 +105,9 @@ Authorization: Bearer <your-jwt-token>
 - **Helmet.js**: Security headers
 - **CORS**: Cross-origin resource sharing configuration
 - **Rate Limiting**: Request rate limiting to prevent abuse
-  <!-- - **Input Validation**: Request validation using Joi and express-validator -->
-  <!-- - **Password Hashing**: Secure password hashing with bcrypt -->
-  <!-- - **JWT Authentication**: Secure token-based authentication -->
+- **Input Validation**: Request validation using Joi and express-validator
+- **Password Hashing**: Secure password hashing with bcrypt
+- **JWT Authentication**: Secure token-based authentication
 
 ---
 
@@ -143,10 +144,14 @@ npm test
 
 ### Environment Setup
 
-1. Install dependencies: `npm install`
-2. Set up your `.env` file
-3. Start MongoDB service
-4. Run development server: `npm run dev`
+<!-- 1. Install dependencies: `npm install` -->
+1. Set up your `.env` file
+2. Start MongoDB service
+3. Run development server: 
+```bash
+npm run docker:build:dev
+npm run docker:up:dev
+```
 
 ---
 
@@ -222,7 +227,7 @@ This project is licensed under the ISC License - see the [LICENSE](LICENSE) file
 If you have any questions or need help with setup, please:
 
 1. Check the [API Documentation](http://localhost:5000/api-docs)
-2. Search existing [Issues](https://github.com/quangtienngo661/MealGenie-be/issues)
+2. Search existing [Issues](https://github.com/quangtienngo661/NouMeal-be/issues)
 3. Create a new issue if needed
 
 ---
