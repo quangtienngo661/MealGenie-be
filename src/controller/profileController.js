@@ -161,7 +161,15 @@ const getUserById = catchAsync(async (req, res, next) => {
   // });
 });
 
+// Get current user's profile (for GET /profile route)
+const getProfile = catchAsync(async (req, res, next) => {
+  const user = await userService.getUserById(req.user._id);
+
+  return res.ok(user, 'Profile retrieved successfully', 200);
+});
+
 module.exports = {
   updateProfile,
   getUserById,
+  getProfile,
 };

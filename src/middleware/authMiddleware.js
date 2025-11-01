@@ -1,13 +1,33 @@
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const { catchAsync } = require('../util/catchAsync');
 const AppError = require('../util/AppError');
 const User = require('../model/userModel');
 
-// Generate JWT token
-const generateToken = (userId) => {
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN || '7d',
+// Generate Access Token (short-lived)
+const generateAccessToken = (userId) => {
+  return jwt.sign({ id: userId, type: 'access' }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_ACCESS_EXPIRES_IN || '15m', // 15 minutes
   });
+};
+
+// Generate Refresh Token (long-lived)
+const generateRefreshToken = (userId) => {
+  return jwt.sign({ id: userId, type: 'refresh' }, process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d', // 7 days
+  });
+};
+
+// Generate both tokens
+const generateTokenPair = (userId) => {
+  const accessToken = generateAccessToken(userId);
+  const refreshToken = generateRefreshToken(userId);
+  return { accessToken, refreshToken };
+};
+
+// Legacy function for backward compatibility
+const generateToken = (userId) => {
+  return generateAccessToken(userId);
 };
 
 // Verify JWT token and authenticate user
@@ -81,28 +101,53 @@ const restrictTo = (...roles) => {
   };
 };
 
-// Create and send token response
-const createSendToken = (user, statusCode, res, message = 'Success') => {
+// Verify refresh token
+const verifyRefreshToken = (token) => {
+  return jwt.verify(token, process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET);
+};
+
+// Create and send token response (enhanced with refresh token)
+const createSendToken = async (user, statusCode, res, message = 'Success') => {
+  const { accessToken, refreshToken } = generateTokenPair(user._id);
+
+  // Store refresh token in database
+  user.refreshToken = refreshToken;
+  user.refreshTokenExpires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+  await user.save({ validateBeforeSave: false });
+
+  // Remove sensitive data from output
+  user.password = undefined;
+  user.refreshToken = undefined;
+
+  return res.status(statusCode).json({
+    success: true,
+    message,
+    data: {
+      accessToken,
+      refreshToken,
+      user
+    }
+  });
+};
+
+// Legacy function for backward compatibility
+const createSendTokenLegacy = (user, statusCode, res, message = 'Success') => {
   const token = generateToken(user._id);
 
   // Remove password from output
   user.password = undefined;
 
   return res.ok({ token, user }, message, 200);
-
-  // return res.status(statusCode).json({
-  //   success: true,
-  //   message,
-  //   token,
-  //   data: {
-  //     user
-  //   }
-  // });
 };
 
 module.exports = {
   generateToken,
+  generateAccessToken,
+  generateRefreshToken,
+  generateTokenPair,
+  verifyRefreshToken,
   authenticate,
   restrictTo,
   createSendToken,
+  createSendTokenLegacy,
 };
