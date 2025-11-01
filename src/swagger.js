@@ -334,6 +334,102 @@ const swaggerOptions = {
             },
           },
         },
+        EmailVerificationRequest: {
+          type: 'object',
+          required: ['email', 'otp'],
+          properties: {
+            email: {
+              type: 'string',
+              format: 'email',
+              description: 'User email address',
+              example: 'john.doe@example.com'
+            },
+            otp: {
+              type: 'string',
+              description: '6-digit OTP received via email',
+              example: '123456'
+            }
+          }
+        },
+        ForgotPasswordRequest: {
+          type: 'object',
+          required: ['email'],
+          properties: {
+            email: {
+              type: 'string',
+              format: 'email',
+              description: 'User email address',
+              example: 'john.doe@example.com'
+            }
+          }
+        },
+        ResetPasswordRequest: {
+          type: 'object',
+          required: ['email', 'otp', 'newPassword'],
+          properties: {
+            email: {
+              type: 'string',
+              format: 'email',
+              description: 'User email address',
+              example: 'john.doe@example.com'
+            },
+            otp: {
+              type: 'string',
+              description: '6-digit OTP received via email',
+              example: '123456'
+            },
+            newPassword: {
+              type: 'string',
+              minLength: 6,
+              description: 'New password (min 6 chars, must contain uppercase, lowercase, and number)',
+              example: 'NewSecurePass123'
+            }
+          }
+        },
+        RefreshTokenRequest: {
+          type: 'object',
+          required: ['refreshToken'],
+          properties: {
+            refreshToken: {
+              type: 'string',
+              description: 'Valid refresh token',
+              example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+            }
+          }
+        },
+        EnhancedAuthResponse: {
+          type: 'object',
+          properties: {
+            success: {
+              type: 'boolean',
+              description: 'Request success status',
+              example: true
+            },
+            message: {
+              type: 'string',
+              description: 'Response message',
+              example: 'Login successful'
+            },
+            data: {
+              type: 'object',
+              properties: {
+                accessToken: {
+                  type: 'string',
+                  description: 'JWT access token (short-lived)',
+                  example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+                },
+                refreshToken: {
+                  type: 'string',
+                  description: 'JWT refresh token (long-lived)',
+                  example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+                },
+                user: {
+                  $ref: '#/components/schemas/User'
+                }
+              }
+            }
+          }
+        },
         AuthResponse: {
           type: 'object',
           properties: {

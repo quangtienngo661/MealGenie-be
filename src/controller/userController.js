@@ -1,6 +1,18 @@
 const { catchAsync } = require('../util/catchAsync');
 const userService = require('../service/userService');
 const { createSendToken } = require('../middleware/authMiddleware');
+const { validationResult } = require('express-validator');
+const AppError = require('../util/AppError');
+
+// Helper function to handle validation errors
+const handleValidationErrors = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const errorMessages = errors.array().map(error => error.msg);
+    return next(new AppError(`Validation Error: ${errorMessages.join(', ')}`, 400));
+  }
+  next();
+};
 
 // Validation middleware for registration
 
@@ -56,9 +68,16 @@ const { createSendToken } = require('../middleware/authMiddleware');
 const registerUser = catchAsync(async (req, res, next) => {
   const userData = req.body;
 
-  const user = await userService.registerUser(userData);
+  const result = await userService.registerUser(userData);
 
-  createSendToken(user, 201, res, 'User registered successfully');
+  // Return registration response with verification message
+  res.status(201).json({
+    success: true,
+    message: result.message || 'User registered successfully! Please check your email for verification code.',
+    data: {
+      user: result
+    }
+  });
 });
 
 /**
@@ -229,4 +248,5 @@ module.exports = {
   loginUser,
   changePassword,
   deactivateAccount,
+  handleValidationErrors
 };

@@ -89,6 +89,34 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    emailVerificationOTP: {
+      type: String,
+      select: false,
+    },
+    emailVerificationOTPExpires: {
+      type: Date,
+      select: false,
+    },
+    passwordResetOTP: {
+      type: String,
+      select: false,
+    },
+    passwordResetOTPExpires: {
+      type: Date,
+      select: false,
+    },
+    refreshToken: {
+      type: String,
+      select: false,
+    },
+    refreshTokenExpires: {
+      type: Date,
+      select: false,
+    },
     lastLogin: {
       type: Date,
     },
@@ -132,6 +160,55 @@ userSchema.methods.getPublicProfile = function () {
   const userObject = this.toObject();
   delete userObject.password;
   return userObject;
+};
+
+// Generate 6-digit OTP
+userSchema.methods.generateOTP = function () {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+};
+
+// Set email verification OTP
+userSchema.methods.setEmailVerificationOTP = function () {
+  const otp = this.generateOTP();
+  this.emailVerificationOTP = otp;
+  this.emailVerificationOTPExpires = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
+  return otp;
+};
+
+// Set password reset OTP
+userSchema.methods.setPasswordResetOTP = function () {
+  const otp = this.generateOTP();
+  this.passwordResetOTP = otp;
+  this.passwordResetOTPExpires = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
+  return otp;
+};
+
+// Verify email verification OTP
+userSchema.methods.verifyEmailOTP = function (otp) {
+  return (
+    this.emailVerificationOTP === otp &&
+    this.emailVerificationOTPExpires > new Date()
+  );
+};
+
+// Verify password reset OTP
+userSchema.methods.verifyPasswordResetOTP = function (otp) {
+  return (
+    this.passwordResetOTP === otp &&
+    this.passwordResetOTPExpires > new Date()
+  );
+};
+
+// Clear email verification OTP
+userSchema.methods.clearEmailVerificationOTP = function () {
+  this.emailVerificationOTP = undefined;
+  this.emailVerificationOTPExpires = undefined;
+};
+
+// Clear password reset OTP
+userSchema.methods.clearPasswordResetOTP = function () {
+  this.passwordResetOTP = undefined;
+  this.passwordResetOTPExpires = undefined;
 };
 
 const User = mongoose.model('User', userSchema);

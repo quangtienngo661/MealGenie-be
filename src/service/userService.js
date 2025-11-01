@@ -1,5 +1,6 @@
 const User = require('../model/userModel');
 const AppError = require('../util/AppError');
+const emailService = require('../util/emailService');
 
 class UserService {
   // Register a new user
@@ -11,11 +12,30 @@ class UserService {
         throw new AppError('User with this email already exists', 400);
       }
 
-      // Create new user
-      const newUser = await User.create(userData);
+      // Create new user (email verification will be required)
+      const newUser = await User.create({
+        ...userData,
+        isEmailVerified: false
+      });
 
-      // Return user without password
-      return newUser.getPublicProfile();
+      // Generate email verification OTP
+      const otp = newUser.setEmailVerificationOTP();
+      await newUser.save({ validateBeforeSave: false });
+
+      // Send verification email
+      try {
+        await emailService.sendEmailVerificationOTP(newUser.email, newUser.name, otp);
+      } catch (emailError) {
+        // If email fails, still return success but log the error
+        console.error('Failed to send verification email:', emailError);
+        // You might want to implement a retry mechanism here
+      }
+
+      // Return user without password and sensitive data
+      return {
+        ...newUser.getPublicProfile(),
+        message: 'Registration successful! Please check your email for verification code.'
+      };
     } catch (error) {
       if (error.name === 'ValidationError') {
         const errors = Object.values(error.errors).map((err) => err.message);
