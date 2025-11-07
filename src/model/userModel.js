@@ -52,6 +52,15 @@ const userSchema = new mongoose.Schema(
       min: [20, 'Weight must be at least 20 kg'],
       max: [500, 'Weight cannot exceed 500 kg'],
     },
+    activity: {
+      type: String,
+      required: [true, 'Activity level is required'],
+      enum: {
+        values: ['sedentary', 'lightly_active', 'moderately_active', 'very_active', 'extra_active'],
+        message:
+          'Activity level must be one of: sedentary, lightly_active, moderately_active, very_active, extra_active',
+      },
+    },
     goal: {
       type: String,
       required: [true, 'Goal is required'],
@@ -77,6 +86,27 @@ const userSchema = new mongoose.Schema(
       {
         type: String,
         trim: true,
+        enum: [
+          'peanuts',
+          'tree_nuts',
+          'milk',
+          'eggs',
+          'wheat_gluten',
+          'fish',
+          'shellfish',
+          'soy',
+          'corn',
+          'sesame',
+          'pineapple',
+          'strawberry',
+          'banana',
+          'tomato',
+          'apple',
+          'chocolate',
+          'honey',
+          'mustard',
+          'other',
+        ],
       },
     ],
     favoriteFoods: [

@@ -1,8 +1,8 @@
-const { catchAsync } = require('../util/catchAsync');
+const { catchAsync } = require('../libs/util/catchAsync');
 const userService = require('../service/userService');
 const { createSendToken } = require('../middleware/authMiddleware');
 const { validationResult } = require('express-validator');
-const AppError = require('../util/AppError');
+const AppError = require('../libs/util/AppError');
 
 // Helper function to handle validation errors
 const handleValidationErrors = (req, res, next) => {
