@@ -22,7 +22,7 @@ class EmailService {
   async sendEmail({ to, subject, text, html }) {
     try {
       const mailOptions = {
-        from: `"${process.env.APP_NAME || 'MealGenie'}" <${process.env.EMAIL_FROM || process.env.EMAIL_USER}>`,
+        from: `"${process.env.APP_NAME || 'NouMeal'}" <${process.env.EMAIL_FROM || process.env.EMAIL_USER}>`,
         to,
         subject,
         text,
@@ -39,8 +39,8 @@ class EmailService {
   }
 
   async sendEmailVerificationOTP(email, name, otp) {
-    const subject = 'Email Verification - MealGenie';
-    const text = `Hi ${name},\n\nYour email verification code is: ${otp}\n\nThis code will expire in 5 minutes.\n\nIf you didn't request this, please ignore this email.\n\nBest regards,\nMealGenie Team`;
+    const subject = 'Email Verification - NouMeal';
+    const text = `Hi ${name},\n\nYour email verification code is: ${otp}\n\nThis code will expire in 5 minutes.\n\nIf you didn't request this, please ignore this email.\n\nBest regards,\nNouMeal Team`;
     
     const html = `
       <!DOCTYPE html>
@@ -71,14 +71,14 @@ class EmailService {
           </div>
           <div class="content">
             <p>Hi <strong>${name}</strong>,</p>
-            <p>Thank you for registering with MealGenie! To complete your registration, please verify your email address using the code below:</p>
+            <p>Thank you for registering with NouMeal! To complete your registration, please verify your email address using the code below:</p>
             <div class="otp-code">${otp}</div>
             <p><strong>This code will expire in 5 minutes.</strong></p>
-            <p>If you didn't create an account with MealGenie, please ignore this email.</p>
-            <p>Best regards,<br>The MealGenie Team</p>
+            <p>If you didn't create an account with NouMeal, please ignore this email.</p>
+            <p>Best regards,<br>The NouMeal Team</p>
           </div>
           <div class="footer">
-            <p>© ${new Date().getFullYear()} MealGenie. All rights reserved.</p>
+            <p>© ${new Date().getFullYear()} NouMeal. All rights reserved.</p>
           </div>
         </div>
       </body>
@@ -89,8 +89,8 @@ class EmailService {
   }
 
   async sendPasswordResetOTP(email, name, otp) {
-    const subject = 'Password Reset Request - MealGenie';
-    const text = `Hi ${name},\n\nYour password reset code is: ${otp}\n\nThis code will expire in 5 minutes.\n\nIf you didn't request this, please ignore this email and your password will remain unchanged.\n\nBest regards,\nMealGenie Team`;
+    const subject = 'Password Reset Request - NouMeal';
+    const text = `Hi ${name},\n\nYour password reset code is: ${otp}\n\nThis code will expire in 5 minutes.\n\nIf you didn't request this, please ignore this email and your password will remain unchanged.\n\nBest regards,\nNouMeal Team`;
     
     const html = `
       <!DOCTYPE html>
@@ -134,10 +134,10 @@ class EmailService {
             <div class="warning">
               <strong>Security Notice:</strong> If you didn't request this password reset, please ignore this email. Your password will remain unchanged.
             </div>
-            <p>Best regards,<br>The MealGenie Team</p>
+            <p>Best regards,<br>The NouMeal Team</p>
           </div>
           <div class="footer">
-            <p>© ${new Date().getFullYear()} MealGenie. All rights reserved.</p>
+            <p>© ${new Date().getFullYear()} NouMeal. All rights reserved.</p>
           </div>
         </div>
       </body>

@@ -33,6 +33,21 @@ const foodSchema = new mongoose.Schema(
           'Category must be one of: fruits, vegetables, grains, protein, dairy, fats, beverages, snacks, desserts, spices',
       },
     },
+    meal: {
+      type: String,
+      enum: [
+        'breakfast',
+        'lunch',
+        'dinner',
+        'snack'
+      ]
+    },
+    ingredients: [
+      {
+        name: { type: String, required: true, trim: true },
+        amount: { type: String, trim: true }, // ví dụ: "200g", "1 cup"
+      },
+    ],
     nutritionalInfo: {
       calories: {
         type: Number,
@@ -58,11 +73,40 @@ const foodSchema = new mongoose.Schema(
         type: Number,
         min: [0, 'Sugar cannot be negative'],
       },
+      sodium: {
+        type: Number,
+        min: [0, 'Sodium cannot be negative'],
+      },
+      cholesterol: {
+        type: Number,
+        min: [0, 'Cholesterol cannot be negative'],
+      },
     },
     allergens: [
       {
         type: String,
         trim: true,
+        enum: [
+          'peanuts',
+          'tree_nuts',
+          'milk',
+          'eggs',
+          'wheat_gluten',
+          'fish',
+          'shellfish',
+          'soy',
+          'corn',
+          'sesame',
+          'pineapple',
+          'strawberry',
+          'banana',
+          'tomato',
+          'apple',
+          'chocolate',
+          'honey',
+          'mustard',
+          'other',
+        ],
       },
     ],
     isActive: {
@@ -91,6 +135,8 @@ const foodSchema = new mongoose.Schema(
 foodSchema.index({ name: 1 });
 foodSchema.index({ category: 1 });
 foodSchema.index({ tags: 1 });
+foodSchema.index({ allergens: 1 });
+foodSchema.index({ meal: 1 });
 
 const Food = mongoose.model('Food', foodSchema);
 

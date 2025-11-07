@@ -1,6 +1,6 @@
 const { body, validationResult } = require('express-validator');
-const { catchAsync } = require('../util/catchAsync');
-const AppError = require('../util/AppError');
+const { catchAsync } = require('../libs/util/catchAsync');
+const AppError = require('../libs/util/AppError');
 const userService = require('../service/userService');
 
 /**

@@ -1,6 +1,7 @@
 const User = require('../model/userModel');
-const AppError = require('../util/AppError');
-const emailService = require('../util/emailService');
+const AppError = require('../libs/util/AppError');
+const emailService = require('../libs/util/emailService');
+const { nutritiousFoodConditions } = require('../libs/conditions/recommendConditions');
 
 class UserService {
   // Register a new user
@@ -183,6 +184,34 @@ class UserService {
 
       return { message: 'Account deactivated successfully' };
     } catch (error) {
+      throw error;
+    }
+  }
+
+  async getDailyCalorieNeeds(userId) {
+    try {
+      const user = await User.findById(userId);
+      if (!user) {
+        throw new AppError('User not found', 404);
+      }
+
+      const { totalCalories, macroProfile } = nutritiousFoodConditions(user);
+
+      // (Protein = 4 cal/g, Carb = 4 cal/g, Fat = 9 cal/g)
+      const proteinGrams = totalCalories * macroProfile.protein / 4;
+      const carbGrams = totalCalories * macroProfile.carb / 4;
+      const fatGrams = totalCalories * macroProfile.fat / 9;
+
+      return {
+        totalCalories,
+        macroDistribution: {
+          protein: Math.round(proteinGrams),
+          carbohydrates: Math.round(carbGrams),
+          fat: Math.round(fatGrams),
+        },
+      };
+    }
+    catch (error) {
       throw error;
     }
   }

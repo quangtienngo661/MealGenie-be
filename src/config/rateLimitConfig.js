@@ -1,5 +1,5 @@
 const { default: rateLimit } = require('express-rate-limit');
-const AppError = require('../util/AppError');
+const AppError = require('../libs/util/AppError');
 
 exports.globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,

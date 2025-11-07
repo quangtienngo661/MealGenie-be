@@ -1,6 +1,6 @@
 const { handleValidationErrors } = require('../../../middleware/validator');
 const { validationResult } = require('express-validator');
-const AppError = require('../../../util/AppError');
+const AppError = require('../../../libs/util/AppError');
 
 // Mock express-validator
 jest.mock('express-validator', () => ({

@@ -7,7 +7,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 
 // Utils
-const { success } = require('./util/response');
+const { success } = require('./libs/util/response');
 
 // Middlewares
 const { globalErrorHandler } = require('./middleware/globalErrorHandler');
@@ -28,6 +28,7 @@ require('./model/foodModel');
 const userRoute = require('./route/userRoute');
 const profileRoute = require('./route/profileRoute');
 const authRoute = require('./route/authRoute');
+const foodRoute = require('./route/foodRoute');
 
 // ========= MIDDLEWARE SECTION =========
 const app = express();
@@ -60,6 +61,7 @@ app.use(
 app.use('/api/v1/users', userRoute); // Authentication routes
 app.use('/api/v1/profile', profileRoute); // Profile management routes
 app.use('/api/v1/auth', authRoute); // Enhanced authentication routes
+app.use('/api/v1/foods', foodRoute) // Food information
 
 // Home route
 app.use('/', (req, res) => {

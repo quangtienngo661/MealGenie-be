@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-const { catchAsync } = require('../util/catchAsync');
-const AppError = require('../util/AppError');
+const { catchAsync } = require('../libs/util/catchAsync');
+const AppError = require('../libs/util/AppError');
 const User = require('../model/userModel');
 
 // Generate Access Token (short-lived)

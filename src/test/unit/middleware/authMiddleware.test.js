@@ -6,7 +6,7 @@ const {
   createSendToken,
 } = require('../../../middleware/authMiddleware');
 const User = require('../../../model/userModel');
-const AppError = require('../../../util/AppError');
+const AppError = require('../../../libs/util/AppError');
 const { mockUserData, createMockObjectId } = require('../../helpers/mockData');
 
 // Mock dependencies

@@ -1,4 +1,4 @@
-const { failure } = require('../util/response');
+const { failure } = require('../libs/util/response');
 
 require('dotenv').config();
 

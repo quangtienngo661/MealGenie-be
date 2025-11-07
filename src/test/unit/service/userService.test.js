@@ -7,7 +7,7 @@ const {
   changePassword,
   deactivateUser,
 } = require('../../../service/userService');
-const AppError = require('../../../util/AppError');
+const AppError = require('../../../libs/util/AppError');
 
 jest.mock('../../../model/userModel');
 
