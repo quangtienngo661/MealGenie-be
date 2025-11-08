@@ -35,6 +35,118 @@ const swaggerOptions = {
         },
       },
       schemas: {
+        Food: {
+          type: 'object',
+          properties: {
+            _id: { type: 'string', example: '64f1f77bcf86cd7994390123' },
+            name: { type: 'string', example: 'Grilled Chicken Salad' },
+            description: { type: 'string', example: 'Lean grilled chicken with mixed greens and vinaigrette.' },
+            category: {
+              type: 'string',
+              enum: [
+                'fruits','vegetables','grains','protein','dairy','fats','beverages','snacks','desserts','spices'
+              ],
+              example: 'protein'
+            },
+            meal: { type: 'string', enum: ['breakfast','lunch','dinner','snack'], example: 'lunch' },
+            ingredients: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  name: { type: 'string', example: 'Chicken Breast' },
+                  amount: { type: 'string', example: '200g' }
+                }
+              }
+            },
+            nutritionalInfo: {
+              type: 'object',
+              properties: {
+                calories: { type: 'number', example: 350 },
+                protein: { type: 'number', example: 35 },
+                carbohydrates: { type: 'number', example: 12 },
+                fat: { type: 'number', example: 15 },
+                fiber: { type: 'number', example: 5 },
+                sugar: { type: 'number', example: 4 },
+                sodium: { type: 'number', example: 420 },
+                cholesterol: { type: 'number', example: 75 }
+              }
+            },
+            allergens: {
+              type: 'array',
+              items: {
+                type: 'string',
+                enum: [
+                  'peanuts','tree_nuts','milk','eggs','wheat_gluten','fish','shellfish','soy','corn','sesame','pineapple','strawberry','banana','tomato','apple','chocolate','honey','mustard','other'
+                ]
+              },
+              example: ['milk']
+            },
+            isActive: { type: 'boolean', example: true },
+            tags: { type: 'array', items: { type: 'string' }, example: ['high_protein','low_carb'] },
+            createdAt: { type: 'string', format: 'date-time', example: '2024-10-07T10:30:00.000Z' },
+            updatedAt: { type: 'string', format: 'date-time', example: '2024-10-07T10:30:00.000Z' }
+          }
+        },
+        FoodCreateRequest: {
+          type: 'object',
+          required: ['name','category'],
+          properties: {
+            name: { type: 'string', example: 'Oatmeal with Berries' },
+            description: { type: 'string', example: 'Healthy oatmeal topped with fresh berries.' },
+            category: { type: 'string', enum: [
+              'fruits','vegetables','grains','protein','dairy','fats','beverages','snacks','desserts','spices'
+            ], example: 'grains' },
+            meal: { type: 'string', enum: ['breakfast','lunch','dinner','snack'], example: 'breakfast' },
+            ingredients: {
+              type: 'array',
+              items: { type: 'object', properties: { name: { type: 'string', example: 'Oats' }, amount: { type: 'string', example: '1 cup' } } }
+            },
+            nutritionalInfo: { $ref: '#/components/schemas/Food/properties/nutritionalInfo' },
+            allergens: { type: 'array', items: { type: 'string' } },
+            tags: { type: 'array', items: { type: 'string' } }
+          }
+        },
+        FoodUpdateRequest: {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+            description: { type: 'string' },
+            category: { type: 'string', enum: [
+              'fruits','vegetables','grains','protein','dairy','fats','beverages','snacks','desserts','spices'
+            ] },
+            meal: { type: 'string', enum: ['breakfast','lunch','dinner','snack'] },
+            ingredients: {
+              type: 'array',
+              items: { type: 'object', properties: { name: { type: 'string' }, amount: { type: 'string' } } }
+            },
+            nutritionalInfo: {
+              type: 'object',
+              properties: {
+                calories: { type: 'number' },
+                protein: { type: 'number' },
+                carbohydrates: { type: 'number' },
+                fat: { type: 'number' },
+                fiber: { type: 'number' },
+                sugar: { type: 'number' },
+                sodium: { type: 'number' },
+                cholesterol: { type: 'number' }
+              }
+            },
+            allergens: { type: 'array', items: { type: 'string' } },
+            isActive: { type: 'boolean' },
+            tags: { type: 'array', items: { type: 'string' } }
+          }
+        },
+        FoodRecommendationResponse: {
+          type: 'object',
+          properties: {
+            breakfast: { type: 'array', items: { $ref: '#/components/schemas/Food' } },
+            lunch: { type: 'array', items: { $ref: '#/components/schemas/Food' } },
+            dinner: { type: 'array', items: { $ref: '#/components/schemas/Food' } },
+            snack: { type: 'array', items: { $ref: '#/components/schemas/Food' } }
+          }
+        },
         User: {
           type: 'object',
           properties: {
@@ -518,6 +630,10 @@ const swaggerOptions = {
         name: 'User Profile',
         description:
           'User profile viewing, updating, and user lookup operations',
+      },
+      {
+        name: 'Foods',
+        description: 'Food catalog management and recommendation endpoints'
       },
     ],
   },
