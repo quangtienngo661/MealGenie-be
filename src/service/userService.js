@@ -197,17 +197,12 @@ class UserService {
 
       const { totalCalories, macroProfile } = nutritiousFoodConditions(user);
 
-      // (Protein = 4 cal/g, Carb = 4 cal/g, Fat = 9 cal/g)
-      const proteinGrams = totalCalories * macroProfile.protein / 4;
-      const carbGrams = totalCalories * macroProfile.carb / 4;
-      const fatGrams = totalCalories * macroProfile.fat / 9;
-
       return {
         totalCalories,
         macroDistribution: {
-          protein: Math.round(proteinGrams),
-          carbohydrates: Math.round(carbGrams),
-          fat: Math.round(fatGrams),
+          protein: Math.round(macroProfile.protein),
+          carbohydrates: Math.round(macroProfile.carb),
+          fat: Math.round(macroProfile.fat),
         },
       };
     }

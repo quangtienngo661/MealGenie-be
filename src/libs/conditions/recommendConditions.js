@@ -26,7 +26,7 @@ const nutritionalProfilePercentages = {
   },
 };
 
-const nutritiousFoodConditions = (user) => {
+exports.nutritiousFoodConditions = (user) => {
   let bmr;
   if (user.gender === 'male') {
     bmr = 10 * user.weight + 6.25 * user.height - 5 * user.age + 5;
