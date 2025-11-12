@@ -147,6 +147,67 @@ const swaggerOptions = {
             snack: { type: 'array', items: { $ref: '#/components/schemas/Food' } }
           }
         },
+        FoodListResponse: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: true },
+            message: { type: 'string', example: 'Foods retrieved successfully' },
+            data: {
+              type: 'array',
+              items: { $ref: '#/components/schemas/Food' }
+            }
+          }
+        },
+        FoodItemResponse: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: true },
+            message: { type: 'string', example: 'Food retrieved successfully' },
+            data: { $ref: '#/components/schemas/Food' }
+          }
+        },
+        FoodRecommendationWrapped: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: true },
+            message: { type: 'string', example: 'Recommendations generated successfully' },
+            data: { $ref: '#/components/schemas/FoodRecommendationResponse' }
+          }
+        },
+        DailyCalorieNeedsResponse: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: true },
+            message: { type: 'string', example: 'Daily calorie needs retrieved successfully' },
+            data: {
+              type: 'object',
+              properties: {
+                totalCalories: { type: 'number', example: 2200 },
+                macroDistribution: {
+                  type: 'object',
+                  properties: {
+                    protein: { type: 'number', example: 150 },
+                    carbohydrates: { type: 'number', example: 250 },
+                    fat: { type: 'number', example: 70 }
+                  }
+                }
+              }
+            }
+          }
+        },
+        RegistrationResponse: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: true },
+            message: { type: 'string', example: 'User registered successfully! Please check your email for verification code.' },
+            data: {
+              type: 'object',
+              properties: {
+                user: { $ref: '#/components/schemas/User' }
+              }
+            }
+          }
+        },
         User: {
           type: 'object',
           properties: {
