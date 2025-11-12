@@ -51,7 +51,7 @@ const handleValidationErrors = (req, res, next) => {
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/AuthResponse'
+ *               $ref: '#/components/schemas/RegistrationResponse'
  *       400:
  *         description: Validation error or email already exists
  *         content:
@@ -101,11 +101,11 @@ const registerUser = catchAsync(async (req, res, next) => {
  *                 password: "SecurePass123"
  *     responses:
  *       200:
- *         description: Login successful
+ *         description: Login successful (returns access & refresh tokens and user)
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/AuthResponse'
+ *               $ref: '#/components/schemas/EnhancedAuthResponse'
  *       401:
  *         description: Invalid credentials or account deactivated
  *         content:
@@ -258,26 +258,7 @@ const deactivateAccount = catchAsync(async (req, res, next) => {
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Daily calorie needs retrieved successfully
- *                 data:
- *                   type: object
- *                   properties:
- *                     maintenanceCalories:
- *                       type: number
- *                       example: 2200
- *                     goalCalories:
- *                       type: number
- *                       example: 2000
- *                     goal:
- *                       type: string
- *                       example: lose_weight
+ *               $ref: '#/components/schemas/DailyCalorieNeedsResponse'
  *       401:
  *         description: Authentication required
  *         content:

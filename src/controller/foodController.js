@@ -16,9 +16,7 @@ const { catchAsync } = require("../libs/util/catchAsync")
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Food'
+ *               $ref: '#/components/schemas/FoodListResponse'
  *       500:
  *         description: Internal server error
  *         content:
@@ -46,7 +44,7 @@ exports.getFoods = catchAsync(async (req, res, next) => {
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/FoodRecommendationResponse'
+ *               $ref: '#/components/schemas/FoodRecommendationWrapped'
  *       404:
  *         description: User not found
  *         content:
@@ -88,7 +86,7 @@ exports.foodsRecommendation = catchAsync(async (req, res, next) => {
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Food'
+ *               $ref: '#/components/schemas/FoodItemResponse'
  *       404:
  *         description: Food not found
  *         content:
@@ -129,7 +127,7 @@ exports.getFoodById = catchAsync(async (req, res, next) => {
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Food'
+ *               $ref: '#/components/schemas/FoodItemResponse'
  *       400:
  *         description: Validation error
  *         content:
@@ -176,7 +174,7 @@ exports.createFood = catchAsync(async (req, res, next) => {
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Food'
+ *               $ref: '#/components/schemas/FoodItemResponse'
  *       404:
  *         description: Food not found
  *         content:
@@ -224,7 +222,7 @@ exports.updateFood = catchAsync(async (req, res, next) => {
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Food'
+ *               $ref: '#/components/schemas/FoodItemResponse'
  *       404:
  *         description: Food not found
  *         content:
