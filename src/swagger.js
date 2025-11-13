@@ -41,6 +41,23 @@ const swaggerOptions = {
             _id: { type: 'string', example: '64f1f77bcf86cd7994390123' },
             name: { type: 'string', example: 'Grilled Chicken Salad' },
             description: { type: 'string', example: 'Lean grilled chicken with mixed greens and vinaigrette.' },
+            instructions: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  step: { type: 'integer', minimum: 1, example: 1 },
+                  description: { type: 'string', example: 'Season chicken with salt and pepper.' }
+                },
+                required: ['step','description']
+              },
+              example: [
+                { step: 1, description: 'Season chicken with salt and pepper.' },
+                { step: 2, description: 'Grill for 6–8 minutes per side until cooked.' },
+                { step: 3, description: 'Toss with greens and vinaigrette.' }
+              ]
+            },
+            imageUrl: { type: 'string', format: 'uri', example: 'https://cdn.example.com/images/grilled-chicken-salad.jpg' },
             category: {
               type: 'string',
               enum: [
@@ -94,6 +111,22 @@ const swaggerOptions = {
           properties: {
             name: { type: 'string', example: 'Oatmeal with Berries' },
             description: { type: 'string', example: 'Healthy oatmeal topped with fresh berries.' },
+            instructions: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  step: { type: 'integer', minimum: 1 },
+                  description: { type: 'string' }
+                },
+                required: ['step','description']
+              },
+              example: [
+                { step: 1, description: 'Boil oats with milk for 5 minutes.' },
+                { step: 2, description: 'Top with fresh berries and honey.' }
+              ]
+            },
+            imageUrl: { type: 'string', format: 'uri', example: 'https://cdn.example.com/images/oatmeal-berries.jpg' },
             category: { type: 'string', enum: [
               'fruits','vegetables','grains','protein','dairy','fats','beverages','snacks','desserts','spices'
             ], example: 'grains' },
@@ -112,6 +145,17 @@ const swaggerOptions = {
           properties: {
             name: { type: 'string' },
             description: { type: 'string' },
+            instructions: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  step: { type: 'integer', minimum: 1 },
+                  description: { type: 'string' }
+                }
+              }
+            },
+            imageUrl: { type: 'string', format: 'uri' },
             category: { type: 'string', enum: [
               'fruits','vegetables','grains','protein','dairy','fats','beverages','snacks','desserts','spices'
             ] },

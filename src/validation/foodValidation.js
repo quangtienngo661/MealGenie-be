@@ -1,4 +1,5 @@
 const { body, param, query } = require('express-validator');
+const AppError = require('../libs/util/AppError');
 
 // Enums based on foodModel.js
 const CATEGORY_VALUES = [
@@ -113,6 +114,33 @@ exports.validateCreateFood = [
     .trim()
     .isLength({ max: 500 })
     .withMessage('description cannot exceed 500 characters'),
+  body('instructions')
+    .isArray()
+    .withMessage('instructions must be an array')
+    .custom((array) => {
+      if (array === undefined || array.length === 0) {
+        throw new AppError('Instructions array cannot be empty');
+      }
+
+      return true;
+    }),
+  body('instructions.*')
+    .optional()
+    .isObject()
+    .withMessage('each instruction must be an object'),
+  body('instructions.*.step')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('instructions[*].step must be an integer >= 1'),
+  body('instructions.*.description')
+    .optional()
+    .isString()
+    .isLength({ max: 500 })
+    .withMessage('instructions[*].description cannot exceed 500 characters'),
+  body('imageUrl')
+    .optional()
+    .isURL()
+    .withMessage('imageUrl must be a valid URL'),
   body('category')
     .notEmpty()
     .withMessage('category is required')
@@ -161,6 +189,27 @@ exports.validateUpdateFood = [
     .trim()
     .isLength({ max: 500 })
     .withMessage('description cannot exceed 500 characters'),
+  body('instructions')
+    .optional()
+    .isArray()
+    .withMessage('instructions must be an array'),
+  body('instructions.*')
+    .optional()
+    .isObject()
+    .withMessage('each instruction must be an object'),
+  body('instructions.*.step')
+    .optional()
+    .isInt({ min: 1 })
+    .withMessage('instructions[*].step must be an integer >= 1'),
+  body('instructions.*.description')
+    .optional()
+    .isString()
+    .isLength({ max: 500 })
+    .withMessage('instructions[*].description cannot exceed 500 characters'),
+  body('imageUrl')
+    .optional()
+    .isURL()
+    .withMessage('imageUrl must be a valid URL'),
   body('category')
     .optional()
     .isIn(CATEGORY_VALUES)
