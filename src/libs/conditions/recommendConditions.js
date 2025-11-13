@@ -101,7 +101,7 @@ exports.aggregateConditions = (user, meal, allergensCondition) => {
 
   // console.log(user)
 
-  const { totalCalories, macroProfile } = nutritiousFoodConditions(user);
+  const { totalCalories, macroProfile } = this.nutritiousFoodConditions(user);
 
   const idealCalories = totalCalories * ratio;
   const idealProtein = macroProfile.protein * ratio;
