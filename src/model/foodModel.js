@@ -13,6 +13,25 @@ const foodSchema = new mongoose.Schema(
       trim: true,
       maxlength: [500, 'Description cannot exceed 500 characters'],
     },
+    instructions: [
+      {
+        step: {
+          type: Number,
+          min: [1, 'Instruction step number must be at least 1'],
+          required: [true, 'Instruction step number is required'],
+        },
+        description: {
+          type: String,
+          required: [true, 'Instruction step description is required'],
+          trim: true,
+          maxlength: [500, 'Instruction step description cannot exceed 500 characters'],
+        },
+      },
+    ],
+    imageUrl: {
+      type: String,
+      trim: true,
+    },
     category: {
       type: String,
       required: [true, 'Food category is required'],
