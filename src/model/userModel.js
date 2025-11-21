@@ -18,13 +18,35 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Password is required'],
       minlength: [6, 'Password must be at least 6 characters long'],
-      select: false, // Don't include password in queries by default
+      select: false,
+    },
+    username: {
+      type: String,
+      unique: true,
+      trim: true,
+      lowercase: true,
+      minlength: [3, 'Username must be at least 3 characters'],
+      maxlength: [30, 'Username cannot exceed 30 characters'],
+      match: [
+        /^[a-zA-Z0-9_]+$/,
+        'Username can only contain letters, numbers, and underscores',
+      ],
     },
     name: {
       type: String,
       required: [true, 'Name is required'],
       trim: true,
       maxlength: [50, 'Name cannot exceed 50 characters'],
+    },
+    avatar: {
+      type: String,
+      default: 'https://ui-avatars.com/api/?background=random&name=User',
+    },
+    bio: {
+      type: String,
+      maxlength: [200, 'Bio cannot exceed 200 characters'],
+      trim: true,
+      default: '',
     },
     age: {
       type: Number,
@@ -82,9 +104,38 @@ const userSchema = new mongoose.Schema(
     favoriteFoods: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Food', // Reference to Food model
+        ref: 'Food',
       },
     ],
+    stats: {
+      followersCount: {
+        type: Number,
+        default: 0,
+        min: 0,
+      },
+      following: [ 
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User', 
+        }
+    ],
+    followers: [ 
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        }
+    ],
+      followingCount: {
+        type: Number,
+        default: 0,
+        min: 0,
+      },
+      postsCount: {
+        type: Number,
+        default: 0,
+        min: 0,
+      },
+    },
     isActive: {
       type: Boolean,
       default: true,
@@ -105,8 +156,12 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// Index for faster queries (removed email index since it's already unique in schema)
-
+// Indexes for faster queries
+userSchema.index({ username: 1 });
+userSchema.index({ email: 1 });
+userSchema.index({ isActive: 1 });
+userSchema.index({ 'stats.followersCount': -1 });
+userSchema.index({ 'stats.followingCount': -1 });
 // Pre-save middleware to hash password
 userSchema.pre('save', async function (next) {
   // Only hash the password if it has been modified (or is new)

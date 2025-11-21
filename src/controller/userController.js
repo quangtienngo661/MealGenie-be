@@ -2,10 +2,6 @@ const { catchAsync } = require('../util/catchAsync');
 const userService = require('../service/userService');
 const { createSendToken } = require('../middleware/authMiddleware');
 
-// Validation middleware for registration
-
-// Helper function to handle validation errors
-
 /**
  * @swagger
  * /api/v1/users/register:
@@ -24,6 +20,7 @@ const { createSendToken } = require('../middleware/authMiddleware');
  *               summary: Register new user
  *               value:
  *                 email: "john.doe@example.com"
+ *                 username: "john_doe"
  *                 password: "SecurePass123"
  *                 name: "John Doe"
  *                 age: 25
@@ -33,25 +30,6 @@ const { createSendToken } = require('../middleware/authMiddleware');
  *                 goal: "build_muscle"
  *                 preferences: ["vegetarian", "high_protein"]
  *                 allergies: ["nuts"]
- *     responses:
- *       201:
- *         description: User registered successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/AuthResponse'
- *       400:
- *         description: Validation error or email already exists
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
  */
 const registerUser = catchAsync(async (req, res, next) => {
   const userData = req.body;
@@ -80,31 +58,6 @@ const registerUser = catchAsync(async (req, res, next) => {
  *               value:
  *                 email: "john.doe@example.com"
  *                 password: "SecurePass123"
- *     responses:
- *       200:
- *         description: Login successful
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/AuthResponse'
- *       401:
- *         description: Invalid credentials or account deactivated
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       400:
- *         description: Validation error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
  */
 const loginUser = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
@@ -119,47 +72,6 @@ const loginUser = catchAsync(async (req, res, next) => {
  * /api/v1/users/change-password:
  *   patch:
  *     summary: Change user password
- *     description: Change the password for the currently authenticated user
- *     tags: [Authentication]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/PasswordChangeRequest'
- *           examples:
- *             changePassword:
- *               summary: Change password
- *               value:
- *                 currentPassword: "OldPass123"
- *                 newPassword: "NewSecurePass456"
- *     responses:
- *       200:
- *         description: Password changed successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ApiResponse'
- *       400:
- *         description: Validation error or incorrect current password
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       401:
- *         description: Authentication required
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
  */
 const changePassword = catchAsync(async (req, res, next) => {
   const { currentPassword, newPassword } = req.body;
@@ -171,11 +83,6 @@ const changePassword = catchAsync(async (req, res, next) => {
   );
 
   return res.ok(result.message, 200);
-
-  res.status(200).json({
-    success: true,
-    message: result.message,
-  });
 });
 
 /**
@@ -183,45 +90,11 @@ const changePassword = catchAsync(async (req, res, next) => {
  * /api/v1/users/deactivate:
  *   patch:
  *     summary: Deactivate user account
- *     description: Deactivate the currently authenticated user's account
- *     tags: [Authentication]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Account deactivated successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ApiResponse'
- *       401:
- *         description: Authentication required
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       404:
- *         description: User not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
  */
 const deactivateAccount = catchAsync(async (req, res, next) => {
   const result = await userService.deactivateUser(req.user._id);
 
   return res.ok(result.message, 200);
-
-  // res.status(200).json({
-  //   success: true,
-  //   message: result.message
-  // });
 });
 
 module.exports = {
@@ -229,4 +102,8 @@ module.exports = {
   loginUser,
   changePassword,
   deactivateAccount,
+  // updateProfile,
+  // getProfileByUsername,
+  // searchUsers,
+  // getSuggestedUsers,
 };

@@ -100,9 +100,32 @@ const createSendToken = (user, statusCode, res, message = 'Success') => {
   // });
 };
 
+const optionalAuth = catchAsync(async (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    token = req.headers.authorization.split(' ')[1];
+  } 
+  if (!token) return next();
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const currentUser = await User.findById(decoded.id);
+
+    if (currentUser && currentUser.isActive) {
+      req.user = currentUser;
+    }
+  } catch (err) {
+    
+  }
+  next();
+})
+
 module.exports = {
   generateToken,
   authenticate,
   restrictTo,
   createSendToken,
+  optionalAuth,
 };

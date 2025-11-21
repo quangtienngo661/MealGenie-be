@@ -10,7 +10,10 @@ class UserService {
       if (existingUser) {
         throw new AppError('User with this email already exists', 400);
       }
-
+      const existingUsername = await User.findOne({ username: userData.username });
+      if (existingUsername) {
+        throw new AppError('Username is already taken', 400);
+      }
       // Create new user
       const newUser = await User.create(userData);
 
@@ -27,37 +30,33 @@ class UserService {
 
   // Login user
   async loginUser(email, password) {
-    try {
-      // Find user and include password for comparison
-      const user = await User.findOne({ email }).select('+password');
-
-      if (!user) {
-        throw new AppError('Invalid email or password', 401);
-      }
-
-      // Check if user is active
-      if (!user.isActive) {
-        throw new AppError(
-          'Your account has been deactivated. Please contact support.',
-          401
-        );
-      }
-
-      // Check password
-      const isPasswordCorrect = await user.comparePassword(password);
-      if (!isPasswordCorrect) {
-        throw new AppError('Invalid email or password', 401);
-      }
-
-      // Update last login
-      user.lastLogin = new Date();
-      const newUser = await user.save({ validateBeforeSave: false });
-
-      return newUser;
-    } catch (error) {
-      throw error;
-    }
+  // Validate
+  if (!email || !password) {
+    throw new AppError('Please provide email and password', 400);
   }
+
+  // Tìm user bằng email
+  const user = await User.findOne({ email }).select('+password');
+
+  if (!user || !(await user.comparePassword(password))) {
+    throw new AppError('Incorrect email or password', 401);
+  }
+
+  // Kiểm tra isActive
+  if (!user.isActive) {
+    throw new AppError('Your account has been deactivated. Please contact support.', 401);
+  }
+
+  // Update lastLogin
+  user.lastLogin = new Date();
+  await user.save({ validateModifiedOnly: true });
+
+  // Remove password
+  user.password = undefined;
+
+  return user;
+}
+
 
   // Get user by ID
   async getUserById(userId) {
@@ -78,9 +77,22 @@ class UserService {
   // Update user profile
   async updateUserProfile(userId, updateData) {
     try {
+      if (updateData.username) {
+        const existingUser = await User.findOne({ 
+          username: updateData.username.toLowerCase(),
+          _id: { $ne: userId } // Exclude current user
+        });
+        
+        if (existingUser) {
+          throw new AppError('Username is already taken', 400);
+        }
+      }
       // Fields that are allowed to be updated
       const allowedFields = [
+        'username',   
         'name',
+        'avatar',   
+        'bio',      
         'age',
         'gender',
         'height',
@@ -90,7 +102,6 @@ class UserService {
         'allergies',
         'favoriteFoods',
       ];
-
       // Filter out non-allowed fields
       const filteredData = {};
       Object.keys(updateData).forEach((key) => {
@@ -165,6 +176,50 @@ class UserService {
     } catch (error) {
       throw error;
     }
+  }
+
+  async getFollowingIds(userId) {
+  const user = await User.findById(userId).select('following');
+  return user && Array.isArray(user.following)
+    ? user.following.map(id => id.toString())
+    : [];
+  }
+
+
+
+  async getFollowerIds(userId) {
+    const user = await User.findById(userId).select('followers');
+    return user && Array.isArray(user.followers)
+      ? user.followers.map(id => id.toString())
+      : [];
+  }
+
+  async followUser(followerId, followingId) {
+    if (followerId.toString() === followingId.toString()) {
+      throw new Error("You can't follow yourself");
+    }
+
+    await User.findByIdAndUpdate(followerId, {
+      $addToSet: { following: followingId },
+      $inc: { 'stats.followingCount': 1 },
+    });
+
+    await User.findByIdAndUpdate(followingId, {
+      $addToSet: { followers: followerId },
+      $inc: { 'stats.followersCount': 1 },
+    });
+  }
+
+  async unfollowUser(followerId, followingId) {
+    await User.findByIdAndUpdate(followerId, {
+      $pull: { following: followingId },
+      $inc: { 'stats.followingCount': -1 },
+    });
+
+    await User.findByIdAndUpdate(followingId, {
+      $pull: { followers: followerId },
+      $inc: { 'stats.followersCount': -1 },
+    });
   }
 }
 

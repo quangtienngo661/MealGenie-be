@@ -27,6 +27,7 @@ require('./model/foodModel');
 // Imported routes
 const userRoute = require('./route/userRoute');
 const profileRoute = require('./route/profileRoute');
+const postRoute = require('./route/postRoute');
 
 // ========= MIDDLEWARE SECTION =========
 const app = express();
@@ -58,7 +59,7 @@ app.use(
 // Routes
 app.use('/api/v1/users', userRoute); // Authentication routes
 app.use('/api/v1/profile', profileRoute); // Profile management routes
-
+app.use('/api/v1/posts', postRoute); // Post management routes
 // Home route
 app.use('/', (req, res) => {
   return res.end('Welcome to MealGenie API');

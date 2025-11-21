@@ -6,6 +6,10 @@ const {
   loginUser,
   changePassword,
   deactivateAccount,
+  updateProfile,           
+  getProfileByUsername,    
+  searchUsers,             
+  getSuggestedUsers,       
 } = require('../controller/userController');
 
 const { getUserById } = require('../controller/profileController');
